@@ -1,0 +1,14 @@
+[project]
+name = "macromodels"
+version = "0.1.0"
+description = "Library that contains classes for macroeconomics equations"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "statsmodels>=0.14.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
