@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from typing import cast
 
 import numpy as np
-import numpy.typing as npt
 import pandas as pd
 import pandera.pandas as pa
 from pandera.typing.pandas import DataFrame, Series
@@ -15,7 +14,7 @@ https://www.sciencedirect.com/science/article/pii/S0954349X25001596
 
 
 @dataclass(slots=True)
-class GreatDecoupling[DT: pd.Series[int] | npt.NDArray]:
+class GreatDecoupling:
     """Great Decoupling model"""
 
     class ResultSchema(pa.DataFrameModel):
@@ -24,14 +23,14 @@ class GreatDecoupling[DT: pd.Series[int] | npt.NDArray]:
 
         value: Series[np.number]
 
-    real_gdp: DT
+    real_gdp: pd.Series[np.number]
 
-    labor_time_worked: DT
+    labor_time_worked: pd.Series[np.number]
 
-    labor_cost: DT
+    labor_cost: pd.Series[np.number]
     """D1_D4_MD5 should be used"""
 
-    inflation: DT
+    inflation: pd.Series[np.number]
 
     def __call__(self) -> DataFrame[ResultSchema]:
         df: DataFrame[GreatDecoupling.ResultSchema] = cast(
