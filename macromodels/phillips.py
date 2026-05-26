@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Annotated, NamedTuple
 
 import numpy as np
-import numpy.typing as npt
+import pandas as pd
 import statsmodels.api as sm
 
 
@@ -16,58 +16,21 @@ class PhillipsCurve:
         p_value: np.float64
         r_squared: np.float64
 
-    inflation: npt.NDArray
+    inflation: pd.Series
 
-    expected_inflation: npt.NDArray
+    expected_inflation: pd.Series
     """expected_inflation - is inflation shifted by 1"""
 
-    unemployment: npt.NDArray
+    unemployment: pd.Series
 
-    nairu: npt.NDArray
+    nairu: pd.Series
 
     # TODO: implement this in formula
-    shocks: npt.NDArray | None = None
-
-    def __post_init__(self) -> None:
-        # validate dimensions
-        if not (
-            self.inflation.ndim
-            == self.expected_inflation.ndim
-            == self.unemployment.ndim
-            == self.nairu.ndim
-            == 1
-        ):
-            raise ValueError(
-                f"{self.__class__.__name__} expects 1-dimensional array of data. Got: "
-                f"indflation ({self.inflation.ndim}) "
-                # TODO: fill
-            )
-
-        if not (
-            len(self.inflation)
-            == len(self.expected_inflation)
-            == len(self.unemployment)
-            == len(self.nairu)
-        ):
-            raise ValueError(
-                f"{self.__class__.__name__} expects all data to be the same dtype."
-            )
-
-        if self.shocks is not None:
-            if self.shocks.ndim != 1:
-                raise ValueError(
-                    f"{self.__class__.__name__} expects 1-dimensional array of shocks. Got: "
-                )
-            if len(self.shocks) != len(self.inflation):
-                raise ValueError(
-                    f"{self.__class__.__name__} expects all data to be the same dtype."
-                )
-        else:
-            self.shocks = np.zeros(len(self.inflation), dtype=self.inflation.dtype)
+    shocks: pd.Series | None = None
 
     def __call__(self) -> PhillipsCurve.Result:
-        delta_inflation: npt.NDArray[DT] = self.inflation - self.expected_inflation
-        delta_unemployment: npt.NDArray[DT] = self.unemployment - self.nairu
+        delta_inflation: pd.Series[np.number] = self.inflation - self.expected_inflation
+        delta_unemployment: pd.Series[np.number] = self.unemployment - self.nairu
 
         X = sm.add_constant(delta_unemployment)
 
