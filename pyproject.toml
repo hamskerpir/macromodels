@@ -5,6 +5,7 @@ description = "Library that contains classes for macroeconomics equations"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "pandera[pandas]>=0.31.1",
     "statsmodels>=0.14.6",
 ]
 
