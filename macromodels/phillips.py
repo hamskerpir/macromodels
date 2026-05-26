@@ -7,7 +7,7 @@ import statsmodels.api as sm
 
 
 @dataclass(slots=True)
-class PhillipsCurve[DT: np.floating | np.integer]:
+class PhillipsCurve:
     """New Keynesian Phillips Curve"""
 
     class Result(NamedTuple):
@@ -16,16 +16,17 @@ class PhillipsCurve[DT: np.floating | np.integer]:
         p_value: np.float64
         r_squared: np.float64
 
-    inflation: npt.NDArray[DT]
+    inflation: npt.NDArray
 
-    expected_inflation: npt.NDArray[DT]
+    expected_inflation: npt.NDArray
     """expected_inflation - is inflation shifted by 1"""
 
-    unemployment: npt.NDArray[DT]
+    unemployment: npt.NDArray
 
-    nairu: npt.NDArray[DT]
+    nairu: npt.NDArray
 
-    shocks: npt.NDArray[DT] | None = None
+    # TODO: implement this in formula
+    shocks: npt.NDArray | None = None
 
     def __post_init__(self) -> None:
         # validate dimensions
